@@ -1,7 +1,8 @@
 ;(function (jQuery) {
 	var
 		Placeholder,
-		$ = jQuery;
+		$ = jQuery,
+		handler = (typeof $().on === 'function') ? 'on' : 'bind';
 
 	Placeholder = function ($input, options) {
 		this.$input = $input;
@@ -16,14 +17,25 @@
 	};
 	Placeholder.prototype = {
 		init: function () {
+			this.checkPlaceholderAttr();
 			this.bindEvent();
 			this.checkStringToJudgeMode(Placeholder.FLG.BLUR);
 		},
+		checkPlaceholderAttr: function () {
+			var
+				stringHold = this.$input.attr('placeholder');
+
+			if (!stringHold) {
+				return;
+			}
+
+			this.options.stringHold = stringHold;
+		},
 		bindEvent: function () {
-			this.$input.on('focus', $.proxy(function () {
+			this.$input[handler]('focus', $.proxy(function () {
 				this.checkStringToJudgeMode(Placeholder.FLG.FOCUS);
 			}, this));
-			this.$input.on('blur', $.proxy(function () {
+			this.$input[handler]('blur', $.proxy(function () {
 				this.checkStringToJudgeMode(Placeholder.FLG.BLUR);
 			}, this));
 		},

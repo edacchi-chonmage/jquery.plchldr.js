@@ -1,0 +1,3 @@
+$(function () {
+	$('#jsi-ph').placeholder();
+});
